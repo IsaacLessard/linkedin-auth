@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,5 +7,16 @@
   </head>
   <body>
     {{{body}}}
+    {{#if user}}
+      <p>
+        Hello {{user.displayName}}
+        |
+        <a href="auth/logout">Logout</a>
+      </p>
+    {{else}}
+      <p>
+        <a href="/auth/linkedin">Login</a>
+      </p>
+    {{/if}}
   </body>
 </html>
