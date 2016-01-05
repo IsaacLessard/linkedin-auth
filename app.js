@@ -5,6 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var passport = require('passport');
+var cookieSession = require('cookie-session')
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -57,6 +58,23 @@ passport.serializeUser(function(user, done) {
 passport.deserializeUser(function(user, done) {
   done(null, user)
 });
+
+// 
+// app.set('trust proxy', 1) // trust first proxy
+//
+// app.use(cookieSession({
+//   name: 'session',
+//   keys: ['key1', 'key2']
+// }))
+//
+// app.use(function (req, res, next) {
+//   // Update views
+//   req.session.views = (req.session.views || 0) + 1
+//
+//   // Write response
+//   res.end(req.session.views + ' views')
+// })
+
 
 app.use('/', routes);
 app.use('/users', users);
