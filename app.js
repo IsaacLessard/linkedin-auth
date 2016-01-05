@@ -59,21 +59,14 @@ passport.deserializeUser(function(user, done) {
   done(null, user)
 });
 
-// 
-// app.set('trust proxy', 1) // trust first proxy
-//
-// app.use(cookieSession({
-//   name: 'session',
-//   keys: ['key1', 'key2']
-// }))
-//
-// app.use(function (req, res, next) {
-//   // Update views
-//   req.session.views = (req.session.views || 0) + 1
-//
-//   // Write response
-//   res.end(req.session.views + ' views')
-// })
+
+app.set('trust proxy', 1) // trust first proxy
+
+app.use(cookieSession({
+  name: 'session',
+  keys: [process.env.COOKIE_SECRET_1, process.env.COOKIE_SECRET_2]
+}))
+
 
 
 app.use('/', routes);
