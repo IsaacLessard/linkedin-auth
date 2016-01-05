@@ -27,7 +27,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+
+app.set('trust proxy', 1) // trust first proxy
+
+app.use(cookieSession({
+  name: 'session',
+  keys: [process.env.COOKIE_SECRET_1, process.env.COOKIE_SECRET_2]
+}))
+
 app.use(passport.initialize());
+app.use(passport.session());
 
 passport.use(new LinkedInStrategy({
   clientID: process.env.LINKEDIN_CLIENT_ID,
@@ -36,8 +46,28 @@ passport.use(new LinkedInStrategy({
   scope: ['r_emailaddress', 'r_basicprofile'],
   state: true
   }, function(accessToken, refreshToken, profile, done) {
+    console.log(profile);
     done(null, {id: profile.id, displayName: profile.displayName})
   }));
+
+
+passport.serializeUser(function(user, done) {
+  done(null, user);
+});
+
+passport.deserializeUser(function(user, done) {
+  done(null, user)
+});
+
+// right above app.use('/', routes);
+app.use(function (req, res, next) {
+  res.locals.user = req.user
+  next()
+})
+
+
+app.use('/', routes);
+app.use('/users', users);
 
 app.get('/auth/linkedin',
   passport.authenticate('linkedin', { state: 'SOME STATE'  }),
@@ -48,29 +78,8 @@ app.get('/auth/linkedin',
 
 	app.get('/auth/linkedin/callback', passport.authenticate('linkedin', {
   successRedirect: '/',
-  failureRedirect: '/login'
+  failureRedirect: '/'
 }));
-
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-  done(null, user)
-});
-
-
-app.set('trust proxy', 1) // trust first proxy
-
-app.use(cookieSession({
-  name: 'session',
-  keys: [process.env.COOKIE_SECRET_1, process.env.COOKIE_SECRET_2]
-}))
-
-
-
-app.use('/', routes);
-app.use('/users', users);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
