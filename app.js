@@ -34,10 +34,10 @@ passport.use(new LinkedInStrategy({
   clientSecret: process.env.LINKEDIN_CLIENT_SECRET,
   callbackURL: process.env.HOST + "/auth/linkedin/callback",
   scope: ['r_emailaddress', 'r_basicprofile'],
-}, function(accessToken, refreshToken, profile, done) {
-    done(null, {id: profile.id, displayName: profile.displayName, token: accessToken})
-  }
-));
+  state: true
+  }, function(accessToken, refreshToken, profile, done) {
+    done(null, {id: profile.id, displayName: profile.displayName})
+  }));
 
 app.get('/auth/linkedin',
   passport.authenticate('linkedin', { state: 'SOME STATE'  }),
