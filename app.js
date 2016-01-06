@@ -73,7 +73,7 @@ app.use('/', routes);
 app.use('/users', users);
 
 app.get('/auth/linkedin',
-  passport.authenticate('linkedin', { state: 'SOME STATE'  }),
+  passport.authenticate('linkedin'),
   function(req, res){
     // The request will be redirected to LinkedIn for authentication, so this
     // function will not be called.
