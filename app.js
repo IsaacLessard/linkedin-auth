@@ -32,11 +32,6 @@ app.use(session({
   saveUninitialized: true,
   secret: 'keyboard cat'
 }));
-//
-// app.use(cookieSession({
-//   name: 'session',
-//   keys: [process.env.COOKIE_SECRET_1, process.env.COOKIE_SECRET_2]
-// }))
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -53,12 +48,10 @@ passport.use(new LinkedInStrategy({
 
 
 passport.serializeUser(function(user, done) {
-  console.log(user);
   done(null, user);
 });
 
 passport.deserializeUser(function(user, done) {
-  console.log(user);
   done(null, user)
 });
 
